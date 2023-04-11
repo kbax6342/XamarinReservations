@@ -29,11 +29,11 @@ namespace Reservations
         public ManageReservationsPage()
         {
           
-            reservations.Add(new Reservation("02/34/2022", "14:43:34", 1,true, "Meeting Room 1", ApprovalStatus.None, -1));
+            reservations.Add(new Reservation("02/34/2022", "14:43:34", 1,true, "Meeting Room 1", ApprovalStatus.Rejected, -1));
             reservations.Add(new Reservation("02/34/2022", "08:43:34", 2, true, "Meeting Room 4", ApprovalStatus.Rejected, 1));
             reservations.Add(new Reservation("02/33/2022", "14:43:22", 3, true, "Meeting Room 2", ApprovalStatus.None, -1));
             reservations.Add(new Reservation("02/34/2022", "09:33:34", 5, true, "Meeting Room 3", ApprovalStatus.Approved, -1));
-            reservations.Add(new Reservation("02/22/2022", "14:43:34", 4, true, "Meeting Room 6", ApprovalStatus.Rejected, 0));
+            reservations.Add(new Reservation("02/22/2022", "14:43:34", 4, true, "Meeting Room 6", ApprovalStatus.None, 0));
             reservations.Add(new Reservation("02/01/2022", "14:13:34", 2, true, "Meeting Room 5", ApprovalStatus.None, 2));
 
             
@@ -366,8 +366,14 @@ namespace Reservations
             Padding = new Thickness(20);
             Content = stackLayout;
 
-            FillPickerLists();
 
+
+            for(int i = 0; i < reservations.Count; i++)
+            {
+                FillPickerLists();
+            }
+
+           
             pickerPending.ItemsSource = null;
             pickerPending.ItemsSource = reservations;
             pickerPending.SelectedIndex = 0;
@@ -383,7 +389,7 @@ namespace Reservations
 
         public void FillPickerLists()
         {
-            for(int i=0; i < reservations.Count; i++)
+            for (int i = 0; i < reservations.Count; i++)
             {
                 Reservation r = reservations[i];
                 if (r.IsApproved == ApprovalStatus.Approved)
@@ -391,15 +397,12 @@ namespace Reservations
                     reservationsApproved.Add(r);
                     reservations.Remove(r);
                 }
-                else
+                else if (r.IsApproved == ApprovalStatus.Rejected)
                 {
                     reservationsRejected.Add(r);
                     reservations.Remove(r);
                 }
             }
-
-            
-
         }
     }
 }
